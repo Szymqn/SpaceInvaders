@@ -9,6 +9,9 @@ from laser import Laser
 
 class Game:
     def __init__(self):
+
+        self.restart = Restart()
+
         # Player setup
         player_sprite = Player((screen_width / 2, screen_height), screen_width, 5)
         self.player = pygame.sprite.GroupSingle(player_sprite)
@@ -72,7 +75,7 @@ class Game:
                     alien_sprite = Alien('green', x, y)
                 else:
                     alien_sprite = Alien('red', x, y)
-                self.aliens.add(alien_sprite)
+                # self.aliens.add(alien_sprite)
 
     def aline_position_checker(self):
         all_aliens = self.aliens.sprites()
@@ -132,10 +135,9 @@ class Game:
 
                 if pygame.sprite.spritecollide(laser, self.player, False):
                     laser.kill()
-                    self.lives -= 1
+                    # self.lives -= 1
                     if self.lives <= 0:
-                        pygame.quit()
-                        sys.exit()
+                        self.lose_message()
 
         # aliens
         if self.aliens:
@@ -143,8 +145,7 @@ class Game:
                 pygame.sprite.spritecollide(alien, self.blocks, True)
 
                 if pygame.sprite.spritecollide(alien, self.player, False):
-                    pygame.quit()
-                    sys.exit()
+                    self.lose_message()
 
     def display_lives(self):
         for live in range(self.lives - 1):
@@ -162,16 +163,19 @@ class Game:
             victory_rect = victory_surf.get_rect(center=(screen_width/2, screen_height/2))
             screen.blit(victory_surf, victory_rect)
 
-            restart_surf = self.font.render('PRESS E TO RESTART', False, 'white')
-            restart_rest = restart_surf.get_rect(center=(screen_width / 2, (screen_height / 2) + 50))
-            screen.blit(restart_surf, restart_rest)
             # stop spawn bonus alien
             self.extra_spawn_time = 1
 
-            keys = pygame.key.get_pressed()
+            self.restart.restart_message()
 
-            if keys[pygame.K_e]:
-                print('restart')
+    def lose_message(self):
+        lose_surf = self.font.render('You lose!', False, 'white')
+        lose_rect = lose_surf.get_rect(center=(screen_width/2, screen_height/2))
+        screen.blit(lose_surf, lose_rect)
+
+        self.extra_spawn_time = 1
+
+        self.restart.restart_message()
 
     def run(self):
         self.player.update()
@@ -192,6 +196,21 @@ class Game:
         self.display_lives()
         self.display_score()
         self.victory_message()
+
+
+class Restart:
+    def __init__(self):
+        self.font = pygame.font.Font('font/Pixeled.ttf', 20)
+
+    def restart_message(self):
+        restart_surf = self.font.render('PRESS E TO RESTART', False, 'white')
+        restart_rest = restart_surf.get_rect(center=(screen_width / 2, (screen_height / 2) + 50))
+        screen.blit(restart_surf, restart_rest)
+
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_e]:
+            print('restart')
 
 
 class CRT:
@@ -220,6 +239,7 @@ if __name__ == '__main__':
     clock = pygame.time.Clock()
     game = Game()
     crt = CRT()
+    game_over = False
 
     ALIENLASER = pygame.USEREVENT + 1
     pygame.time.set_timer(ALIENLASER, 800)
@@ -234,8 +254,8 @@ if __name__ == '__main__':
                 game.alien_shoot()
 
         screen.fill((30, 30, 30))
-        game.run()
         crt.draw()
+        game.run()
 
         pygame.display.flip()
         clock.tick(60)
