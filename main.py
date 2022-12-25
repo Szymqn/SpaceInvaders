@@ -9,8 +9,7 @@ from laser import Laser
 
 class Game:
     def __init__(self):
-
-        self.restart = Restart()
+        self.game_restart = True
 
         # Player setup
         player_sprite = Player((screen_width / 2, screen_height), screen_width, 5)
@@ -32,9 +31,11 @@ class Game:
         self.create_multiple_obstacles(*self.obstacle_x_positions, x_start=screen_width / 15, y_start=480)
 
         # Alien setup
+        self.rows = 6
+        self.cols = 8
         self.aliens = pygame.sprite.Group()
         self.alien_lasers = pygame.sprite.Group()
-        self.alien_setup(rows=6, cols=8)
+        self.alien_setup(self.rows, self.cols)
         self.alien_direction = 1
 
         # Extra setup
@@ -75,7 +76,10 @@ class Game:
                     alien_sprite = Alien('green', x, y)
                 else:
                     alien_sprite = Alien('red', x, y)
-                # self.aliens.add(alien_sprite)
+                self.aliens.add(alien_sprite)
+
+    def alien_destroy(self):
+        self.aliens.empty()
 
     def aline_position_checker(self):
         all_aliens = self.aliens.sprites()
@@ -135,7 +139,7 @@ class Game:
 
                 if pygame.sprite.spritecollide(laser, self.player, False):
                     laser.kill()
-                    # self.lives -= 1
+                    self.lives -= 1
                     if self.lives <= 0:
                         self.lose_message()
 
@@ -160,57 +164,63 @@ class Game:
     def victory_message(self):
         if not self.aliens.sprites():
             victory_surf = self.font.render('You won!', False, 'white')
-            victory_rect = victory_surf.get_rect(center=(screen_width/2, screen_height/2))
+            victory_rect = victory_surf.get_rect(center=(screen_width / 2, screen_height / 2))
             screen.blit(victory_surf, victory_rect)
 
             # stop spawn bonus alien
             self.extra_spawn_time = 1
-
-            self.restart.restart_message()
+            self.restart_message()
 
     def lose_message(self):
+        self.game_restart = False
         lose_surf = self.font.render('You lose!', False, 'white')
-        lose_rect = lose_surf.get_rect(center=(screen_width/2, screen_height/2))
+        lose_rect = lose_surf.get_rect(center=(screen_width / 2, screen_height / 2))
         screen.blit(lose_surf, lose_rect)
 
         self.extra_spawn_time = 1
+        self.restart_message()
 
-        self.restart.restart_message()
-
-    def run(self):
-        self.player.update()
-        self.alien_lasers.update()
-        self.extra.update()
-
-        self.aliens.update(self.alien_direction)
-        self.aline_position_checker()
-        self.extra_alien_timer()
-        self.collision_checks()
-
-        self.player.sprite.lasers.draw(screen)
-        self.player.draw(screen)
-        self.blocks.draw(screen)
-        self.aliens.draw(screen)
-        self.alien_lasers.draw(screen)
-        self.extra.draw(screen)
-        self.display_lives()
-        self.display_score()
-        self.victory_message()
-
-
-class Restart:
-    def __init__(self):
-        self.font = pygame.font.Font('font/Pixeled.ttf', 20)
+    def restart(self):
+        self.lives = 3
+        self.score = 0
+        self.alien_setup(self.rows, self.cols)
 
     def restart_message(self):
-        restart_surf = self.font.render('PRESS E TO RESTART', False, 'white')
+        self.game_restart = False
+        self.alien_destroy()
+
+        restart_surf = self.font.render('PRESS R TO RESTART', False, 'white')
         restart_rest = restart_surf.get_rect(center=(screen_width / 2, (screen_height / 2) + 50))
         screen.blit(restart_surf, restart_rest)
 
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_e]:
-            print('restart')
+        if keys[pygame.K_r]:
+            self.game_restart = True
+            self.restart()
+
+    def run(self):
+        if self.game_restart:
+            self.player.update()
+            self.alien_lasers.update()
+            self.extra.update()
+
+            self.aliens.update(self.alien_direction)
+            self.aline_position_checker()
+            self.extra_alien_timer()
+            self.collision_checks()
+
+            self.player.sprite.lasers.draw(screen)
+            self.player.draw(screen)
+            self.blocks.draw(screen)
+            self.aliens.draw(screen)
+            self.alien_lasers.draw(screen)
+            self.extra.draw(screen)
+
+            self.display_lives()
+            self.display_score()
+        else:
+            self.restart_message()
 
 
 class CRT:
@@ -239,7 +249,6 @@ if __name__ == '__main__':
     clock = pygame.time.Clock()
     game = Game()
     crt = CRT()
-    game_over = False
 
     ALIENLASER = pygame.USEREVENT + 1
     pygame.time.set_timer(ALIENLASER, 800)
