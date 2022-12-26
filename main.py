@@ -7,6 +7,25 @@ from random import choice, randint
 from laser import Laser
 
 
+class Start:
+    def __init__(self):
+        self.font = pygame.font.Font('font/Pixeled.ttf', 20)
+        self.status = True
+
+    def menu(self):
+        menu_surf = self.font.render('WELCOME TO SPACE INVADERS', False, 'white')
+        menu_rect = menu_surf.get_rect(center=(screen_width / 2, (screen_height / 2)))
+        screen.blit(menu_surf, menu_rect)
+
+        start_surf = self.font.render('PRESS E TO START', False, 'white')
+        start_rect = menu_surf.get_rect(center=((screen_width / 2) + 80, (screen_height / 2) + 50))
+        screen.blit(start_surf, start_rect)
+
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_e]:
+            self.status = False
+
+
 class Game:
     def __init__(self):
         self.game_restart = True
@@ -164,7 +183,7 @@ class Game:
             screen.blit(self.live_surf, (x, 8))
 
     def display_score(self):
-        score_surf = self.font.render('score:'+str(self.score), False, 'white')
+        score_surf = self.font.render('score:' + str(self.score), False, 'white')
         score_rect = score_surf.get_rect(topleft=(10, -10))
         screen.blit(score_surf, score_rect)
 
@@ -188,8 +207,8 @@ class Game:
         screen.blit(message_surf, message_rect)
 
         restart_surf = self.font.render('PRESS R TO RESTART', False, 'white')
-        restart_rest = restart_surf.get_rect(center=(screen_width / 2, (screen_height / 2) + 50))
-        screen.blit(restart_surf, restart_rest)
+        restart_rect = restart_surf.get_rect(center=(screen_width / 2, (screen_height / 2) + 50))
+        screen.blit(restart_surf, restart_rect)
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_r]:
@@ -255,6 +274,7 @@ if __name__ == '__main__':
     screen_height = 600
     screen = pygame.display.set_mode((screen_width, screen_height))
     clock = pygame.time.Clock()
+    start = Start()
     game = Game()
     crt = CRT()
 
@@ -262,17 +282,20 @@ if __name__ == '__main__':
     pygame.time.set_timer(ALIENLASER, 800)
 
     while True:
+        screen.fill((30, 30, 30))
+        crt.draw()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
-            if event.type == ALIENLASER:
+            if event.type == ALIENLASER and start.status is False:
                 game.alien_shoot()
 
-        screen.fill((30, 30, 30))
-        crt.draw()
-        game.run()
+        if start.status:
+            start.menu()
+        else:
+            game.run()
 
         pygame.display.flip()
         clock.tick(60)
