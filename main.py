@@ -76,10 +76,10 @@ class Game:
 
                 if row_index == 0:
                     alien_sprite = Alien('yellow', x, y)
-                # elif 1 <= row_index <= 2:
-                #     alien_sprite = Alien('green', x, y)
-                # else:
-                #     alien_sprite = Alien('red', x, y)
+                elif 1 <= row_index <= 2:
+                    alien_sprite = Alien('green', x, y)
+                else:
+                    alien_sprite = Alien('red', x, y)
                 self.aliens.add(alien_sprite)
 
     def aliens_destroy(self):
@@ -145,6 +145,7 @@ class Game:
                     laser.kill()
                     self.lives -= 1
                     if self.lives <= 0:
+                        self.victory_stat = False
                         self.restart_message()
 
         # aliens
@@ -177,6 +178,8 @@ class Game:
 
         self.obstacles_destroy()
         self.create_multiple_obstacles(*self.obstacle_x_positions, x_start=screen_width / 15, y_start=480)
+
+        self.alien_lasers.empty()
 
         self.lives = 3
         self.score = 0
