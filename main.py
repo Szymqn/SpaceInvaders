@@ -46,6 +46,7 @@ class Game:
         # Audio
         music = pygame.mixer.Sound('audio/music.wav')
         music.set_volume(0.04)
+        # infinity loop
         music.play(loops=-1)
         self.laser_sound = pygame.mixer.Sound('audio/laser.wav')
         self.laser_sound.set_volume(0.06)
@@ -76,10 +77,10 @@ class Game:
 
                 if row_index == 0:
                     alien_sprite = Alien('yellow', x, y)
-                elif 1 <= row_index <= 2:
-                    alien_sprite = Alien('green', x, y)
-                else:
-                    alien_sprite = Alien('red', x, y)
+                # elif 1 <= row_index <= 2:
+                #     alien_sprite = Alien('green', x, y)
+                # else:  # >= 3:
+                #     alien_sprite = Alien('red', x, y)
                 self.aliens.add(alien_sprite)
 
     def aliens_destroy(self):
@@ -171,16 +172,6 @@ class Game:
         if not self.aliens.sprites():
             self.restart_message()
 
-    def restart(self):
-        self.alien_setup(self.rows, self.cols)
-
-        self.extra_spawn_time = randint(40, 80)
-
-        self.create_multiple_obstacles(*self.obstacle_x_positions, x_start=screen_width / 15, y_start=480)
-
-        self.lives = 3
-        self.score = 0
-
     def restart_message(self):
         self.extra_spawn_time = 1
         self.game_restart = False
@@ -204,6 +195,16 @@ class Game:
         if keys[pygame.K_r]:
             self.game_restart = True
             self.restart()
+
+    def restart(self):
+        self.alien_setup(self.rows, self.cols)
+
+        self.extra_spawn_time = randint(40, 80)
+
+        self.create_multiple_obstacles(*self.obstacle_x_positions, x_start=screen_width / 15, y_start=480)
+
+        self.lives = 3
+        self.score = 0
 
     def run(self):
         if self.game_restart:
