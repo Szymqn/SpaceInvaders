@@ -77,10 +77,10 @@ class Game:
 
                 if row_index == 0:
                     alien_sprite = Alien('yellow', x, y)
-                # elif 1 <= row_index <= 2:
-                #     alien_sprite = Alien('green', x, y)
-                # else:  # >= 3:
-                #     alien_sprite = Alien('red', x, y)
+                elif 1 <= row_index <= 2:
+                    alien_sprite = Alien('green', x, y)
+                else:  # >= 3:
+                    alien_sprite = Alien('red', x, y)
                 self.aliens.add(alien_sprite)
 
     def aliens_destroy(self):
