@@ -1,7 +1,7 @@
 import pygame
 import sys
-from player import Player
 import obstacle
+from player import Player
 from alien import Alien, Extra
 from random import choice, randint
 from laser import Laser
@@ -10,10 +10,10 @@ from laser import Laser
 class Game:
     def __init__(self):
         self.game_restart = True
-        self.victory_stat = True
+        self.victory_status = True
 
         # Player setup
-        player_sprite = Player((screen_width / 2, screen_height), screen_width, 5)
+        player_sprite = Player((screen_width / 2, screen_height), screen_width, speed=5)
         self.player = pygame.sprite.GroupSingle(player_sprite)
 
         # health and score setup
@@ -145,7 +145,7 @@ class Game:
                     laser.kill()
                     self.lives -= 1
                     if self.lives <= 0:
-                        self.victory_stat = False
+                        self.victory_status = False
                         self.restart_message()
 
         # aliens
@@ -154,6 +154,7 @@ class Game:
                 pygame.sprite.spritecollide(alien, self.blocks, True)
 
                 if pygame.sprite.spritecollide(alien, self.player, False):
+                    self.victory_status = False
                     self.restart_message()
 
     def display_lives(self):
@@ -162,7 +163,7 @@ class Game:
             screen.blit(self.live_surf, (x, 8))
 
     def display_score(self):
-        score_surf = self.font.render(f'score: {self.score}', False, 'white')
+        score_surf = self.font.render('score:'+str(self.score), False, 'white')
         score_rect = score_surf.get_rect(topleft=(10, -10))
         screen.blit(score_surf, score_rect)
 
@@ -187,7 +188,7 @@ class Game:
         self.aliens_destroy()
         self.alien_lasers.empty()
 
-        if self.victory_stat:
+        if self.victory_status:
             message_surf = self.font.render('You Won!', False, 'white')
         else:
             message_surf = self.font.render('You Lose!', False, 'white')
