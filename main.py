@@ -10,6 +10,7 @@ from laser import Laser
 class Game:
     def __init__(self):
         self.game_restart = True
+        self.victory_stat = True
 
         # Player setup
         player_sprite = Player((screen_width / 2, screen_height), screen_width, 5)
@@ -64,6 +65,9 @@ class Game:
         for offset_x in offset:
             self.create_obstacle(x_start, y_start, offset_x)
 
+    def obstacles_destroy(self):
+        self.blocks.empty()
+
     def alien_setup(self, rows, cols, x_distance=60, y_distance=48, x_offset=70, y_offset=100):
         for row_index, row in enumerate(range(rows)):
             for col_index, col in enumerate(range(cols)):
@@ -72,13 +76,13 @@ class Game:
 
                 if row_index == 0:
                     alien_sprite = Alien('yellow', x, y)
-                elif 1 <= row_index <= 2:
-                    alien_sprite = Alien('green', x, y)
-                else:
-                    alien_sprite = Alien('red', x, y)
+                # elif 1 <= row_index <= 2:
+                #     alien_sprite = Alien('green', x, y)
+                # else:
+                #     alien_sprite = Alien('red', x, y)
                 self.aliens.add(alien_sprite)
 
-    def alien_destroy(self):
+    def aliens_destroy(self):
         self.aliens.empty()
 
     def aline_position_checker(self):
@@ -141,7 +145,7 @@ class Game:
                     laser.kill()
                     self.lives -= 1
                     if self.lives <= 0:
-                        self.lose_message()
+                        self.restart_message()
 
         # aliens
         if self.aliens:
@@ -149,7 +153,7 @@ class Game:
                 pygame.sprite.spritecollide(alien, self.blocks, True)
 
                 if pygame.sprite.spritecollide(alien, self.player, False):
-                    self.lose_message()
+                    self.restart_message()
 
     def display_lives(self):
         for live in range(self.lives - 1):
@@ -161,40 +165,39 @@ class Game:
         score_rect = score_surf.get_rect(topleft=(10, -10))
         screen.blit(score_surf, score_rect)
 
-    def victory_message(self):
+    def victory(self):
         if not self.aliens.sprites():
-            victory_surf = self.font.render('You won!', False, 'white')
-            victory_rect = victory_surf.get_rect(center=(screen_width / 2, screen_height / 2))
-            screen.blit(victory_surf, victory_rect)
-
-            # stop spawn bonus alien
-            self.extra_spawn_time = 1
             self.restart_message()
 
-    def lose_message(self):
-        self.game_restart = False
-        lose_surf = self.font.render('You lose!', False, 'white')
-        lose_rect = lose_surf.get_rect(center=(screen_width / 2, screen_height / 2))
-        screen.blit(lose_surf, lose_rect)
-
-        self.extra_spawn_time = 1
-        self.restart_message()
-
     def restart(self):
-        self.lives = 3
-        self.score = 0
+        self.aliens_destroy()
         self.alien_setup(self.rows, self.cols)
 
+        self.extra_spawn_time = randint(40, 80)
+
+        self.obstacles_destroy()
+        self.create_multiple_obstacles(*self.obstacle_x_positions, x_start=screen_width / 15, y_start=480)
+
+        self.lives = 3
+        self.score = 0
+
     def restart_message(self):
+        self.extra_spawn_time = 1
         self.game_restart = False
-        self.alien_destroy()
+
+        if self.victory_stat:
+            message_surf = self.font.render('You Won!', False, 'white')
+        else:
+            message_surf = self.font.render('You Lose!', False, 'white')
+
+        message_rect = message_surf.get_rect(center=(screen_width / 2, screen_height / 2))
+        screen.blit(message_surf, message_rect)
 
         restart_surf = self.font.render('PRESS R TO RESTART', False, 'white')
         restart_rest = restart_surf.get_rect(center=(screen_width / 2, (screen_height / 2) + 50))
         screen.blit(restart_surf, restart_rest)
 
         keys = pygame.key.get_pressed()
-
         if keys[pygame.K_r]:
             self.game_restart = True
             self.restart()
@@ -219,6 +222,7 @@ class Game:
 
             self.display_lives()
             self.display_score()
+            self.victory()
         else:
             self.restart_message()
 
