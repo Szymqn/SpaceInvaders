@@ -171,15 +171,11 @@ class Game:
             self.restart_message()
 
     def restart(self):
-        self.aliens_destroy()
         self.alien_setup(self.rows, self.cols)
 
         self.extra_spawn_time = randint(40, 80)
 
-        self.obstacles_destroy()
         self.create_multiple_obstacles(*self.obstacle_x_positions, x_start=screen_width / 15, y_start=480)
-
-        self.alien_lasers.empty()
 
         self.lives = 3
         self.score = 0
@@ -187,6 +183,9 @@ class Game:
     def restart_message(self):
         self.extra_spawn_time = 1
         self.game_restart = False
+        self.obstacles_destroy()
+        self.aliens_destroy()
+        self.alien_lasers.empty()
 
         if self.victory_stat:
             message_surf = self.font.render('You Won!', False, 'white')
