@@ -12,7 +12,7 @@ class Start:
         self.font = pygame.font.Font('font/Pixeled.ttf', 20)
         self.status = True
 
-    def menu(self):
+    def draw(self):
         menu_surf = self.font.render('WELCOME TO SPACE INVADERS', False, 'white')
         menu_rect = menu_surf.get_rect(center=(screen_width / 2, (screen_height / 2)))
         screen.blit(menu_surf, menu_rect)
@@ -293,7 +293,7 @@ if __name__ == '__main__':
                 game.alien_shoot()
 
         if start.status:
-            start.menu()
+            start.draw()
         else:
             game.run()
 
