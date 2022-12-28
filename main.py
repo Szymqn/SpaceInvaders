@@ -5,25 +5,7 @@ from player import Player
 from alien import Alien, Extra
 from random import choice, randint
 from laser import Laser
-
-
-class Start:
-    def __init__(self):
-        self.font = pygame.font.Font('font/Pixeled.ttf', 20)
-        self.status = True
-
-    def draw(self):
-        menu_surf = self.font.render('WELCOME TO SPACE INVADERS', False, 'white')
-        menu_rect = menu_surf.get_rect(center=(screen_width / 2, (screen_height / 2)-80))
-        screen.blit(menu_surf, menu_rect)
-
-        start_surf = self.font.render('PRESS E TO START', False, 'white')
-        start_rect = menu_surf.get_rect(center=((screen_width / 2) + 80, (screen_height / 2) + 10))
-        screen.blit(start_surf, start_rect)
-
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_e]:
-            self.status = False
+from start import Start
 
 
 class Game:
@@ -301,7 +283,7 @@ if __name__ == '__main__':
     screen_height = 600
     screen = pygame.display.set_mode((screen_width, screen_height))
     clock = pygame.time.Clock()
-    start = Start()
+    start = Start(screen, screen_height, screen_width)
     game = Game()
     crt = CRT()
 
