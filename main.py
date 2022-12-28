@@ -14,11 +14,11 @@ class Start:
 
     def draw(self):
         menu_surf = self.font.render('WELCOME TO SPACE INVADERS', False, 'white')
-        menu_rect = menu_surf.get_rect(center=(screen_width / 2, (screen_height / 2)))
+        menu_rect = menu_surf.get_rect(center=(screen_width / 2, (screen_height / 2)-80))
         screen.blit(menu_surf, menu_rect)
 
         start_surf = self.font.render('PRESS E TO START', False, 'white')
-        start_rect = menu_surf.get_rect(center=((screen_width / 2) + 95, (screen_height / 2) + 50))
+        start_rect = menu_surf.get_rect(center=((screen_width / 2) + 80, (screen_height / 2) + 10))
         screen.blit(start_surf, start_rect)
 
         keys = pygame.key.get_pressed()
@@ -36,7 +36,7 @@ class Game:
         self.player = pygame.sprite.GroupSingle(player_sprite)
 
         # health and score setup
-        self.lives = 3
+        self.lives = 0
         self.live_surf = pygame.image.load('graphics/player.png').convert_alpha()
         self.live_x_start_pos = screen_width - (self.live_surf.get_size()[0] * 2 + 20)
         self.score = 0
@@ -203,17 +203,41 @@ class Game:
         else:
             message_surf = self.font.render('You Lose!', False, 'white')
 
-        message_rect = message_surf.get_rect(center=(screen_width / 2, screen_height / 2))
+        message_rect = message_surf.get_rect(center=(screen_width / 2, (screen_height / 2) - 60))
         screen.blit(message_surf, message_rect)
 
+        score_surf = self.font.render(f'YOUR SCORE: {self.score}', False, 'white')
+        score_rect = score_surf.get_rect(center=(screen_width / 2, (screen_height / 2)))
+        screen.blit(score_surf, score_rect)
+
+        if self.score < int(self.high_score()):
+            h_score_surf = self.font.render(f'HIGH SCORE: {self.high_score()}', False, 'white')
+            h_score_rect = h_score_surf.get_rect(center=(screen_width / 2, (screen_height / 2) + 60))
+            screen.blit(h_score_surf, h_score_rect)
+        else:
+            new_h_score_surf = self.font.render('NEW HIGH SCORE!!!', False, 'white')
+            new_h_score_rect = new_h_score_surf.get_rect(center=(screen_width / 2, (screen_height / 2) + 60))
+            screen.blit(new_h_score_surf, new_h_score_rect)
+
         restart_surf = self.font.render('PRESS R TO RESTART', False, 'white')
-        restart_rect = restart_surf.get_rect(center=(screen_width / 2, (screen_height / 2) + 50))
+        restart_rect = restart_surf.get_rect(center=(screen_width / 2, (screen_height / 2) + 120))
         screen.blit(restart_surf, restart_rect)
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_r]:
             self.game_restart = True
             self.restart()
+
+    def high_score(self):
+        file = open('high_score', 'r')
+        lines = file.readlines()
+        high_score = lines[0]
+
+        if self.score > int(high_score):
+            with open('high_score', 'w') as f:
+                f.writelines(str(self.score))
+
+        return high_score
 
     def restart(self):
         self.alien_setup(self.rows, self.cols)
@@ -222,7 +246,7 @@ class Game:
 
         self.create_multiple_obstacles(*self.obstacle_x_positions, x_start=screen_width / 15, y_start=480)
 
-        self.lives = 3
+        self.lives = 0
         self.score = 0
 
     def run(self):
