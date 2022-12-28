@@ -36,7 +36,7 @@ class Game:
         self.player = pygame.sprite.GroupSingle(player_sprite)
 
         # health and score setup
-        self.lives = 0
+        self.lives = 3
         self.live_surf = pygame.image.load('graphics/player.png').convert_alpha()
         self.live_x_start_pos = screen_width - (self.live_surf.get_size()[0] * 2 + 20)
         self.score = 0
@@ -210,14 +210,7 @@ class Game:
         score_rect = score_surf.get_rect(center=(screen_width / 2, (screen_height / 2)))
         screen.blit(score_surf, score_rect)
 
-        if self.score < int(self.high_score()):
-            h_score_surf = self.font.render(f'HIGH SCORE: {self.high_score()}', False, 'white')
-            h_score_rect = h_score_surf.get_rect(center=(screen_width / 2, (screen_height / 2) + 60))
-            screen.blit(h_score_surf, h_score_rect)
-        else:
-            new_h_score_surf = self.font.render('NEW HIGH SCORE!!!', False, 'white')
-            new_h_score_rect = new_h_score_surf.get_rect(center=(screen_width / 2, (screen_height / 2) + 60))
-            screen.blit(new_h_score_surf, new_h_score_rect)
+        self.score_message()
 
         restart_surf = self.font.render('PRESS R TO RESTART', False, 'white')
         restart_rect = restart_surf.get_rect(center=(screen_width / 2, (screen_height / 2) + 120))
@@ -227,6 +220,16 @@ class Game:
         if keys[pygame.K_r]:
             self.game_restart = True
             self.restart()
+
+    def score_message(self):
+        if self.score < int(self.high_score()):
+            h_score_surf = self.font.render(f'HIGH SCORE: {self.high_score()}', False, 'white')
+            h_score_rect = h_score_surf.get_rect(center=(screen_width / 2, (screen_height / 2) + 60))
+            screen.blit(h_score_surf, h_score_rect)
+        else:
+            new_h_score_surf = self.font.render('NEW HIGH SCORE!!!', False, 'white')
+            new_h_score_rect = new_h_score_surf.get_rect(center=(screen_width / 2, (screen_height / 2) + 60))
+            screen.blit(new_h_score_surf, new_h_score_rect)
 
     def high_score(self):
         file = open('high_score', 'r')
@@ -246,7 +249,7 @@ class Game:
 
         self.create_multiple_obstacles(*self.obstacle_x_positions, x_start=screen_width / 15, y_start=480)
 
-        self.lives = 0
+        self.lives = 3
         self.score = 0
 
     def run(self):
