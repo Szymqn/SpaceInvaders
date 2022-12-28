@@ -18,7 +18,7 @@ class Start:
         screen.blit(menu_surf, menu_rect)
 
         start_surf = self.font.render('PRESS E TO START', False, 'white')
-        start_rect = menu_surf.get_rect(center=((screen_width / 2) + 80, (screen_height / 2) + 50))
+        start_rect = menu_surf.get_rect(center=((screen_width / 2) + 95, (screen_height / 2) + 50))
         screen.blit(start_surf, start_rect)
 
         keys = pygame.key.get_pressed()
