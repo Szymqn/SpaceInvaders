@@ -11,9 +11,10 @@ if __name__ == '__main__':
     screen_height = 600
     screen = pygame.display.set_mode((screen_width, screen_height))
     clock = pygame.time.Clock()
-    start = Start(screen, screen_height, screen_width)
-    game = Game(screen, screen_height, screen_width)
-    crt = CRT(screen, screen_height, screen_width)
+    screen_setting = [screen, screen_height, screen_height]
+    start = Start(*screen_setting)
+    game = Game(*screen_setting)
+    crt = CRT(*screen_setting)
 
     ALIENLASER = pygame.USEREVENT + 1
     pygame.time.set_timer(ALIENLASER, 800)
