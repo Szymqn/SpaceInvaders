@@ -6,6 +6,7 @@ from alien import Alien, Extra
 from random import choice, randint
 from laser import Laser
 from start import Start
+from crt import CRT
 
 
 class Game:
@@ -259,24 +260,6 @@ class Game:
             self.restart_message()
 
 
-class CRT:
-    def __init__(self):
-        self.tv = pygame.image.load('graphics/tv.png').convert_alpha()
-        self.tv = pygame.transform.scale(self.tv, (screen_width, screen_height))
-
-    def create_crt_lines(self):
-        line_height = 3
-        line_amount = int(screen_height / line_height)
-        for line in range(line_amount):
-            y_pos = line * line_height
-            pygame.draw.line(self.tv, 'black', (0, y_pos), (screen_width, y_pos), 1)
-
-    def draw(self):
-        self.tv.set_alpha(randint(75, 90))
-        self.create_crt_lines()
-        screen.blit(self.tv, (0, 0))
-
-
 if __name__ == '__main__':
     pygame.init()
     screen_width = 600
@@ -285,7 +268,7 @@ if __name__ == '__main__':
     clock = pygame.time.Clock()
     start = Start(screen, screen_height, screen_width)
     game = Game()
-    crt = CRT()
+    crt = CRT(screen, screen_height, screen_width)
 
     ALIENLASER = pygame.USEREVENT + 1
     pygame.time.set_timer(ALIENLASER, 800)
