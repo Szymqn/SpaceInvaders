@@ -8,7 +8,7 @@ class CRT:
         self.screen_height = screen_height
         self.screen_width = screen_width
         self.tv = pygame.image.load('graphics/tv.png').convert_alpha()
-        self.tv = pygame.transform.scale(self.tv, (screen_width, screen_height))
+        self.tv = pygame.transform.scale(self.tv, (self.screen_width, self.screen_height))
 
     def create_crt_lines(self):
         line_height = 3
