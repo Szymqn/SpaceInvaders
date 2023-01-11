@@ -16,6 +16,7 @@ class Game:
         self.victory_status = True
         self.status = False
         self.quit = False
+        self.score_record = True
 
         # Player setup
         player_sprite = Player((self.screen_width / 2, self.screen_height), self.screen_width, speed=5)
@@ -220,6 +221,8 @@ class Game:
             self.quit = True
 
     def score_message(self):
+        self.leaderboard()
+
         if self.score <= int(self.high_score()):
             h_score_surf = self.font.render(f'HIGH SCORE: {self.high_score()}', False, 'white')
             h_score_rect = h_score_surf.get_rect(center=(self.screen_width / 2, (self.screen_height / 2) - 60))
@@ -229,14 +232,23 @@ class Game:
             new_h_score_rect = new_h_score_surf.get_rect(center=(self.screen_width / 2, (self.screen_height / 2) - 60))
             self.screen.blit(new_h_score_surf, new_h_score_rect)
 
+    def leaderboard(self):
+        if self.score_record:
+            file = open('records/leaderboard', 'a')
+            file.writelines(str(self.score))
+            file.close()
+            self.score_record = False
+
     def high_score(self):
-        file = open('high_score', 'r')
+        file = open('records/high_score', 'r')
         lines = file.readlines()
         high_score = lines[0]
+        file.close()
 
         if self.score > int(high_score):
-            with open('high_score', 'w') as f:
-                f.writelines(str(self.score))
+            with open('records/high_score', 'w') as f:
+                f.write(str(self.score))
+                f.close()
 
         return high_score
 
@@ -246,6 +258,8 @@ class Game:
         self.extra_spawn_time = randint(40, 80)
 
         self.create_multiple_obstacles(*self.obstacle_x_positions, x_start=self.screen_width / 15, y_start=480)
+
+        self.score_record = True
 
         self.lives = 3
         self.score = 0
