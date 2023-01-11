@@ -15,6 +15,7 @@ class Game:
         self.game_restart = True
         self.victory_status = True
         self.status = False
+        self.quit = False
 
         # Player setup
         player_sprite = Player((self.screen_width / 2, self.screen_height), self.screen_width, speed=5)
@@ -188,22 +189,26 @@ class Game:
         else:
             message_surf = self.font.render('You Lose!', False, 'white')
 
-        message_rect = message_surf.get_rect(center=(self.screen_width / 2, (self.screen_height / 2) - 60))
+        message_rect = message_surf.get_rect(center=(self.screen_width / 2, (self.screen_height / 2) - 180))
         self.screen.blit(message_surf, message_rect)
 
         score_surf = self.font.render(f'YOUR SCORE: {self.score}', False, 'white')
-        score_rect = score_surf.get_rect(center=(self.screen_width / 2, (self.screen_height / 2)))
+        score_rect = score_surf.get_rect(center=(self.screen_width / 2, (self.screen_height / 2) - 120))
         self.screen.blit(score_surf, score_rect)
 
         self.score_message()
 
         restart_surf = self.font.render('PRESS R TO RESTART', False, 'white')
-        restart_rect = restart_surf.get_rect(center=(self.screen_width / 2, (self.screen_height / 2) + 120))
+        restart_rect = restart_surf.get_rect(center=(self.screen_width / 2, (self.screen_height / 2)))
         self.screen.blit(restart_surf, restart_rect)
 
         menu_surf = self.font.render('PRESS M TO MENU', False, 'white')
-        menu_rect = menu_surf.get_rect(center=(self.screen_width / 2, (self.screen_height / 2) + 180))
+        menu_rect = menu_surf.get_rect(center=(self.screen_width / 2, (self.screen_height / 2) + 60))
         self.screen.blit(menu_surf, menu_rect)
+
+        quit_surf = self.font.render('PRESS Q TO QUIT', False, 'white')
+        quit_rect = menu_surf.get_rect(center=((self.screen_width / 2), (self.screen_height / 2) + 120))
+        self.screen.blit(quit_surf, quit_rect)
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_r]:
@@ -211,15 +216,17 @@ class Game:
             self.restart()
         elif keys[pygame.K_m]:
             self.status = True
+        elif keys[pygame.K_q]:
+            self.quit = True
 
     def score_message(self):
-        if self.score < int(self.high_score()):
+        if self.score <= int(self.high_score()):
             h_score_surf = self.font.render(f'HIGH SCORE: {self.high_score()}', False, 'white')
-            h_score_rect = h_score_surf.get_rect(center=(self.screen_width / 2, (self.screen_height / 2) + 60))
+            h_score_rect = h_score_surf.get_rect(center=(self.screen_width / 2, (self.screen_height / 2) - 60))
             self.screen.blit(h_score_surf, h_score_rect)
         else:
             new_h_score_surf = self.font.render('NEW HIGH SCORE!!!', False, 'white')
-            new_h_score_rect = new_h_score_surf.get_rect(center=(self.screen_width / 2, (self.screen_height / 2) + 60))
+            new_h_score_rect = new_h_score_surf.get_rect(center=(self.screen_width / 2, (self.screen_height / 2) - 60))
             self.screen.blit(new_h_score_surf, new_h_score_rect)
 
     def high_score(self):

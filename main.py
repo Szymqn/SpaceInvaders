@@ -39,6 +39,9 @@ if __name__ == '__main__':
             if event.type == ALIENLASER and start.status is False:
                 game.alien_shoot()
 
+        if game.quit:
+            quit_game()
+
         if start.status:
             start.draw()
             if start.quit:
