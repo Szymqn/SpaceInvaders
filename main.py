@@ -19,6 +19,12 @@ if __name__ == '__main__':
     ALIENLASER = pygame.USEREVENT + 1
     pygame.time.set_timer(ALIENLASER, 800)
 
+    def to_menu():
+        start.status = True
+        game.status = False
+        game.game_restart = True
+        game.restart()
+
     while True:
         screen.fill((30, 30, 30))
         crt.draw()
@@ -32,6 +38,8 @@ if __name__ == '__main__':
 
         if start.status:
             start.draw()
+        elif game.status:
+            to_menu()
         else:
             game.run()
 

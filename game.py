@@ -14,9 +14,10 @@ class Game:
 
         self.game_restart = True
         self.victory_status = True
+        self.status = False
 
         # Player setup
-        player_sprite = Player((self.screen_width / 2, self.screen_height), screen_width, speed=5)
+        player_sprite = Player((self.screen_width / 2, self.screen_height), self.screen_width, speed=5)
         self.player = pygame.sprite.GroupSingle(player_sprite)
 
         # health and score setup
@@ -200,10 +201,16 @@ class Game:
         restart_rect = restart_surf.get_rect(center=(self.screen_width / 2, (self.screen_height / 2) + 120))
         self.screen.blit(restart_surf, restart_rect)
 
+        menu_surf = self.font.render('PRESS M TO MENU', False, 'white')
+        menu_rect = menu_surf.get_rect(center=(self.screen_width / 2, (self.screen_height / 2) + 180))
+        self.screen.blit(menu_surf, menu_rect)
+
         keys = pygame.key.get_pressed()
         if keys[pygame.K_r]:
             self.game_restart = True
             self.restart()
+        elif keys[pygame.K_m]:
+            self.status = True
 
     def score_message(self):
         if self.score < int(self.high_score()):
