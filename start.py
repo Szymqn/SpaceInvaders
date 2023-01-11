@@ -8,6 +8,7 @@ class Start:
         self.screen_width = screen_width
         self.font = pygame.font.Font('font/Pixeled.ttf', 20)
         self.status = True
+        self.quit = False
 
     def draw(self):
         menu_surf = self.font.render('WELCOME TO SPACE INVADERS', False, 'white')
@@ -18,6 +19,12 @@ class Start:
         start_rect = menu_surf.get_rect(center=((self.screen_width / 2) + 80, (self.screen_height / 2) + 10))
         self.screen.blit(start_surf, start_rect)
 
+        quit_surf = self.font.render('PRESS Q TO QUIT', False, 'white')
+        quit_rect = menu_surf.get_rect(center=((self.screen_width / 2) + 95, (self.screen_height / 2) + 100))
+        self.screen.blit(quit_surf, quit_rect)
+
         keys = pygame.key.get_pressed()
         if keys[pygame.K_e]:
             self.status = False
+        elif keys[pygame.K_q]:
+            self.quit = True

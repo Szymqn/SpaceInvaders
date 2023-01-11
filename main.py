@@ -25,19 +25,24 @@ if __name__ == '__main__':
         game.game_restart = True
         game.restart()
 
+    def quit_game():
+        pygame.quit()
+        sys.exit()
+
     while True:
         screen.fill((30, 30, 30))
         crt.draw()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                quit_game()
             if event.type == ALIENLASER and start.status is False:
                 game.alien_shoot()
 
         if start.status:
             start.draw()
+            if start.quit:
+                quit_game()
         elif game.status:
             to_menu()
         else:
