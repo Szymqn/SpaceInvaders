@@ -30,7 +30,14 @@ class Leaderboard:
         self.screen.blit(head_surf, head_rect)
 
         for i in range(10):
-            score_surf = self.font.render(f'{pos}: {records[i]}', False, gold_color)
+            try:
+                value = records[i]
+            except IndexError:
+                records.append(None)
+                value = None
+
+            score_surf = self.font.render(f'{pos}: {value}', False, gold_color)
+
             score_rect = score_surf.get_rect(center=(self.screen_width / 2, ((self.screen_height / 2) - 220) + offset))
             offset += 40
             print(offset)
