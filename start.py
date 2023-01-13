@@ -13,22 +13,6 @@ class Start:
         self.leaderboard = Leaderboard(self.screen, self.screen_height, self.screen_width)
 
     def draw(self):
-        menu_surf = self.font.render('WELCOME TO SPACE INVADERS', False, 'white')
-        menu_rect = menu_surf.get_rect(center=(self.screen_width / 2, (self.screen_height / 2) - 80))
-        self.screen.blit(menu_surf, menu_rect)
-
-        start_surf = self.font.render('PRESS E TO START', False, 'white')
-        start_rect = menu_surf.get_rect(center=((self.screen_width / 2) + 90, (self.screen_height / 2) + 10))
-        self.screen.blit(start_surf, start_rect)
-
-        lead_surf = self.font.render('PRESS L TO LEADERBOARD', False, '#AA6C39')
-        lead_rect = lead_surf.get_rect(center=((self.screen_width / 2) + 10, (self.screen_height / 2) + 100))
-        self.screen.blit(lead_surf, lead_rect)
-
-        quit_surf = self.font.render('PRESS Q TO QUIT', False, 'white')
-        quit_rect = quit_surf.get_rect(center=((self.screen_width / 2) + 0, (self.screen_height / 2) + 190))
-        self.screen.blit(quit_surf, quit_rect)
-
         keys = pygame.key.get_pressed()
         if keys[pygame.K_e]:
             self.status = False  # deactivate start surface
@@ -36,5 +20,23 @@ class Start:
             self.status = False
             self.quit = True  # deactivate and quit game
         elif keys[pygame.K_l]:
-            if self.leaderboard.status:  # active leaderboard surface
-                self.leaderboard.draw()
+            self.leaderboard.status = True  # active leaderboard surface
+
+        if not self.leaderboard.status:
+            menu_surf = self.font.render('WELCOME TO SPACE INVADERS', False, 'white')
+            menu_rect = menu_surf.get_rect(center=(self.screen_width / 2, (self.screen_height / 2) - 80))
+            self.screen.blit(menu_surf, menu_rect)
+
+            start_surf = self.font.render('PRESS E TO START', False, 'white')
+            start_rect = menu_surf.get_rect(center=((self.screen_width / 2) + 90, (self.screen_height / 2) + 10))
+            self.screen.blit(start_surf, start_rect)
+
+            lead_surf = self.font.render('PRESS L TO LEADERBOARD', False, '#AA6C39')
+            lead_rect = lead_surf.get_rect(center=((self.screen_width / 2) + 10, (self.screen_height / 2) + 100))
+            self.screen.blit(lead_surf, lead_rect)
+
+            quit_surf = self.font.render('PRESS Q TO QUIT', False, 'white')
+            quit_rect = quit_surf.get_rect(center=((self.screen_width / 2) + 0, (self.screen_height / 2) + 190))
+            self.screen.blit(quit_surf, quit_rect)
+        else:
+            self.leaderboard.draw()
