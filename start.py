@@ -8,8 +8,8 @@ class Start:
         self.screen_height = screen_height
         self.screen_width = screen_width
         self.font = pygame.font.Font('font/Pixeled.ttf', 20)
-        self.status = True
-        self.quit = False
+        self.status = True  # start surface status
+        self.quit = False  # quit game
         self.leaderboard = Leaderboard(self.screen, self.screen_height, self.screen_width)
 
     def draw(self):
@@ -31,8 +31,10 @@ class Start:
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_e]:
-            self.status = False
+            self.status = False  # deactivate start surface
         elif keys[pygame.K_q]:
-            self.quit = True
+            self.status = False
+            self.quit = True  # deactivate and quit game
         elif keys[pygame.K_l]:
-            self.leaderboard.draw()
+            if self.leaderboard.status:  # active leaderboard surface
+                self.leaderboard.draw()

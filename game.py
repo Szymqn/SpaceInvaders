@@ -14,7 +14,7 @@ class Game:
 
         self.game_restart = True
         self.victory_status = True
-        self.status = False
+        self.status = True
         self.quit = False
         self.score_record = True
 
@@ -216,7 +216,7 @@ class Game:
             self.game_restart = True
             self.restart()
         elif keys[pygame.K_m]:
-            self.status = True
+            self.status = False
         elif keys[pygame.K_q]:
             self.quit = True
 

@@ -8,7 +8,6 @@ class Leaderboard:
         self.screen_width = screen_width
         self.font = pygame.font.Font('font/Pixeled.ttf', 20)
         self.status = True
-        self.quit = False
 
     @staticmethod
     def get_records():
@@ -41,3 +40,8 @@ class Leaderboard:
         quit_surf = self.font.render('PRESS Q TO QUIT', False, gold_color)
         quit_rect = quit_surf.get_rect(center=(self.screen_width / 2, (self.screen_height / 2) + 240))
         self.screen.blit(quit_surf, quit_rect)
+
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_q]:
+            self.status = False

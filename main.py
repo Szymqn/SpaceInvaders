@@ -42,13 +42,13 @@ if __name__ == '__main__':
         if game.quit:
             quit_game()
 
-        if start.status:
+        if start.status:  # active start surface
             start.draw()
             if start.quit:
                 quit_game()
-        elif game.status:
+        elif not game.status:  # deactivate game surface
             to_menu()
-        else:
+        else:  # active game surface
             game.run()
 
         pygame.display.flip()
