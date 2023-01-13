@@ -216,6 +216,8 @@ class Game:
             self.game_restart = True
             self.restart()
         elif keys[pygame.K_m]:
+            self.game_restart = True
+            self.restart()
             self.status = False
         elif keys[pygame.K_q]:
             self.quit = True

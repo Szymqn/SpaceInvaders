@@ -48,6 +48,7 @@ if __name__ == '__main__':
                 quit_game()
         elif not game.status:  # deactivate game surface
             to_menu()
+            game.status = True
         else:  # active game surface
             game.run()
 
