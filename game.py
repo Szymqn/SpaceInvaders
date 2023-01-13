@@ -235,6 +235,7 @@ class Game:
     def leaderboard(self):
         if self.score_record:
             file = open('records/leaderboard', 'a')
+            file.seek(0)
             file.write(str(self.score)+' ')
             file.close()
             self.score_record = False
