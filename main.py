@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
     def to_menu():
         start.status = True
-        game.status = False
+        game.status = True
         game.game_restart = True
         game.restart()
 
@@ -48,7 +48,6 @@ if __name__ == '__main__':
                 quit_game()
         elif not game.status:  # deactivate game surface
             to_menu()
-            game.status = True
         else:  # active game surface
             game.run()
 
