@@ -18,22 +18,18 @@ class Start:
         self.settings = Settings(*screen_settings)
 
     def draw(self):
+
         keys = pygame.key.get_pressed()
 
-        key_pressed = pygame.K_e if keys[pygame.K_e] else pygame.K_q if keys[pygame.K_q] else pygame.K_l if keys[
-            pygame.K_l] else pygame.K_s if keys[pygame.K_s] else None
-
-        if key_pressed:
-            match key_pressed:
-                case pygame.K_e:
-                    self.status = False
-                case pygame.K_q:
-                    self.status = False
-                    self.quit = True
-                case pygame.K_l:
-                    self.leaderboard.status = True
-                case pygame.K_s:
-                    self.settings.status = True
+        if keys[pygame.K_e]:
+            self.status = False
+        elif keys[pygame.K_q]:
+            self.status = False
+            self.quit = True
+        elif keys[pygame.K_l]:
+            self.leaderboard.status = True
+        elif keys[pygame.K_s]:
+            self.settings.status = True
 
         if self.leaderboard.status:
             self.leaderboard.draw()
