@@ -1,4 +1,5 @@
 import pygame
+from Levels import Levels
 
 
 class Settings:
@@ -8,6 +9,7 @@ class Settings:
         self.screen_width = screen_width
         self.status = False
         self.font = pygame.font.Font('font/Pixeled.ttf', 20)
+        self.level = Levels
 
     def go_back(self):
         self.status = False
@@ -35,5 +37,13 @@ class Settings:
 
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_m]:  # submit
+        # submit
+        if keys[pygame.K_m]:
             self.go_back()
+        # change level
+        elif keys[pygame.K_1]:
+            self.level(1)
+        elif keys[pygame.K_2]:
+            self.level(2)
+        elif keys[pygame.K_3]:
+            self.level(3)
