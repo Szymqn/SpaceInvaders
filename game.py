@@ -4,7 +4,7 @@ from random import choice, randint
 from alien import Alien, Extra
 from laser import Laser
 from player import Player
-from settings import Settings
+from settings import get_level
 
 
 class Game:
@@ -18,8 +18,6 @@ class Game:
         self.status = True
         self.quit = False
         self.score_record = True
-
-        self.levels = Settings(screen, screen_height, screen_width).levels
 
         # Player setup
         player_sprite = Player((self.screen_width / 2, self.screen_height), self.screen_width, speed=5)
@@ -79,20 +77,19 @@ class Game:
         self.blocks.empty()
 
     def alien_setup(self, rows, cols, x_distance=60, y_distance=48, x_offset=70, y_offset=100):
+        global alien_sprite
         for row_index, row in enumerate(range(rows)):
             for col_index, col in enumerate(range(cols)):
                 x = col_index * x_distance + x_offset
                 y = row_index * y_distance + y_offset
-                print(self.levels.level)
+                level = get_level()
 
                 if row_index == 0:
                     alien_sprite = Alien('yellow', x, y)
-                if self.levels.level == 2 or self.levels.level == 3:
-                    if 1 <= row_index <= 2:
-                        alien_sprite = Alien('green', x, y)
-                if self.levels.level == 3:
-                    if row_index >= 3:
-                        alien_sprite = Alien('red', x, y)
+                if 1 <= row_index <= 2 and level > 1:
+                    alien_sprite = Alien('green', x, y)
+                if row_index >= 3 and level > 2:
+                    alien_sprite = Alien('red', x, y)
 
                 self.aliens.add(alien_sprite)
 
