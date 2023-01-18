@@ -1,5 +1,12 @@
 import pygame
-from levels import Levels
+
+
+def get_level():
+    file = open('records/level', 'r')
+    temp = file.read().strip().split('\n')
+    records = list(map(int, temp))
+    final = records[-1]
+    return final
 
 
 class Settings:
@@ -9,10 +16,14 @@ class Settings:
         self.screen_width = screen_width
         self.status = False
         self.font = pygame.font.Font('font/Pixeled.ttf', 20)
-        self.levels = Levels()
 
     def go_back(self):
         self.status = False
+
+    def level(self, level):
+        file = open('records/level', 'a')
+        file.write(str(level)+'\n')
+        file.close()
 
     def draw(self):
         level_surf = self.font.render('SET DIFFICULTY LEVEL', False, 'white')
@@ -34,7 +45,6 @@ class Settings:
         manu_surf = self.font.render('PRESS M TO MENU', False, 'white')
         menu_rect = manu_surf.get_rect(center=(self.screen_width / 2, self.screen_height / 2 + 100))
         self.screen.blit(manu_surf, menu_rect)
-        print(self.levels.level)
 
         keys = pygame.key.get_pressed()
 
@@ -44,8 +54,8 @@ class Settings:
 
         # change level
         elif keys[pygame.K_1]:
-            self.levels.level = 1
+            self.level(1)
         elif keys[pygame.K_2]:
-            self.levels.level = 2
+            self.level(2)
         elif keys[pygame.K_3]:
-            self.levels.level = 3
+            self.level(3)
