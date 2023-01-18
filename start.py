@@ -59,4 +59,3 @@ class Start:
             quit_surf = self.font.render('PRESS Q TO QUIT', False, 'white')
             quit_rect = quit_surf.get_rect(center=((self.screen_width / 2) + 0, (self.screen_height / 2) + 190))
             self.screen.blit(quit_surf, quit_rect)
-
