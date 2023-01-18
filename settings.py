@@ -1,5 +1,5 @@
 import pygame
-from Levels import Levels
+from levels import Levels
 
 
 class Settings:
@@ -9,7 +9,7 @@ class Settings:
         self.screen_width = screen_width
         self.status = False
         self.font = pygame.font.Font('font/Pixeled.ttf', 20)
-        self.level = Levels
+        self.levels = Levels()
 
     def go_back(self):
         self.status = False
@@ -34,16 +34,18 @@ class Settings:
         manu_surf = self.font.render('PRESS M TO MENU', False, 'white')
         menu_rect = manu_surf.get_rect(center=(self.screen_width / 2, self.screen_height / 2 + 100))
         self.screen.blit(manu_surf, menu_rect)
+        print(self.levels.level)
 
         keys = pygame.key.get_pressed()
 
         # submit
         if keys[pygame.K_m]:
             self.go_back()
+
         # change level
         elif keys[pygame.K_1]:
-            self.level(1)
+            self.levels.level = 1
         elif keys[pygame.K_2]:
-            self.level(2)
+            self.levels.level = 2
         elif keys[pygame.K_3]:
-            self.level(3)
+            self.levels.level = 3
