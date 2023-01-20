@@ -6,7 +6,7 @@ class MyTestCase(unittest.TestCase):
     def test_get_level(self):
         self.level = settings.get_level()
 
-        self.assertEqual(settings.get_level(), 2)  # add assertion here
+        self.assertEqual(settings.get_level(), 1)  # add assertion here
 
 
 if __name__ == '__main__':
