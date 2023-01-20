@@ -19,6 +19,9 @@ if __name__ == '__main__':
     ALIENLASER = pygame.USEREVENT + 1
     pygame.time.set_timer(ALIENLASER, 800)
 
+    def test_placeholder():
+        pass
+
     def to_menu():
         start.status = True
         game.status = True
