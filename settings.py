@@ -2,8 +2,9 @@ import pygame
 
 
 def get_level():
-    file = open('records/level', 'r')
-    temp = file.read().strip().split('\n')
+    with open('records/level', 'r') as f:
+        temp = f.read().strip().split('\n')
+
     records = list(map(int, temp))
     final = records[-1]
     return final
@@ -21,9 +22,8 @@ class Settings:
         self.status = False
 
     def level(self, level):
-        file = open('records/level', 'a')
-        file.write(str(level)+'\n')
-        file.close()
+        with open('records/level', 'a') as f:
+            f.write(str(level)+'\n')
 
     def draw(self):
         level_surf = self.font.render('SET DIFFICULTY LEVEL', False, 'white')

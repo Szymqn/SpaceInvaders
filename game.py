@@ -240,16 +240,16 @@ class Game:
 
     def leaderboard(self):
         if self.score_record:
-            file = open('records/leaderboard', 'a')
-            file.write(str(self.score)+'\n')
-            file.close()
+            with open('records/leaderboard', 'a') as f:
+                f.write(str(self.score)+'\n')
+
             self.score_record = False
 
     def high_score(self):
-        file = open('records/high_score', 'r')
-        lines = file.readlines()
+        with open('records/high_score', 'r') as f:
+            lines = f.readlines()
+
         high_score = lines[0]
-        file.close()
 
         if self.score > int(high_score):
             with open('records/high_score', 'w') as f:

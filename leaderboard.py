@@ -11,11 +11,12 @@ class Leaderboard:
 
     @staticmethod
     def get_records():
-        file = open('records/leaderboard', 'r')
-        temp = file.read().strip().split('\n')
+        with open('records/leaderboard', 'r') as f:
+            temp = f.read().strip().split('\n')
+
         records = list(map(int, temp))
         records.sort(reverse=True)
-        file.close()
+
         return records
 
     def draw(self):
