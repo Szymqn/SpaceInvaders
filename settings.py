@@ -1,13 +1,18 @@
 import pygame
 
 
-def get_level():
+def get_level() -> int:
     with open('records/level', 'r') as f:
         temp = f.read().strip().split('\n')
 
     records = list(map(int, temp))
     final = records[-1]
     return final
+
+
+def change_level(level) -> None:
+    with open('records/level', 'a') as f:
+        f.write(str(level)+'\n')
 
 
 class Settings:
@@ -17,13 +22,10 @@ class Settings:
         self.screen_width = screen_width
         self.status = False
         self.font = pygame.font.Font('font/Pixeled.ttf', 20)
+        self.current_level = get_level()
 
     def go_back(self):
         self.status = False
-
-    def level(self, level):
-        with open('records/level', 'a') as f:
-            f.write(str(level)+'\n')
 
     def draw(self):
         level_surf = self.font.render('SET DIFFICULTY LEVEL', False, 'white')
@@ -54,8 +56,8 @@ class Settings:
 
         # change level
         elif keys[pygame.K_1]:
-            self.level(1)
+            change_level(1)
         elif keys[pygame.K_2]:
-            self.level(2)
+            change_level(2)
         elif keys[pygame.K_3]:
-            self.level(3)
+            change_level(3)
