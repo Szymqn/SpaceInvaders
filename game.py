@@ -4,7 +4,6 @@ from random import choice, randint
 from alien import Alien, Extra
 from laser import Laser
 from player import Player
-from settings import get_level
 
 
 class Game:
@@ -18,6 +17,7 @@ class Game:
         self.status = True
         self.quit = False
         self.score_record = True
+        self.level = 1
 
         # Player setup
         player_sprite = Player((self.screen_width / 2, self.screen_height), self.screen_width, speed=5)
@@ -54,7 +54,7 @@ class Game:
         music = pygame.mixer.Sound('audio/music.wav')
         music.set_volume(0.04)
         # infinity loop
-        music.play(loops=-1)
+        # music.play(loops=-1)
         self.laser_sound = pygame.mixer.Sound('audio/laser.wav')
         self.laser_sound.set_volume(0.06)
         self.explosion_sound = pygame.mixer.Sound('audio/explosion.wav')
@@ -82,13 +82,12 @@ class Game:
             for col_index, col in enumerate(range(cols)):
                 x = col_index * x_distance + x_offset
                 y = row_index * y_distance + y_offset
-                level = get_level()
 
                 if row_index == 0:
                     alien_sprite = Alien('yellow', x, y)
-                if 1 <= row_index <= 2 and level > 1:
+                if 1 <= row_index <= 2 and self.level > 1:
                     alien_sprite = Alien('green', x, y)
-                if row_index >= 3 and level > 2:
+                if row_index >= 3 and self.level > 2:
                     alien_sprite = Alien('red', x, y)
 
                 self.aliens.add(alien_sprite)
