@@ -269,7 +269,7 @@ class Game:
         self.lives = 3
         self.score = 0
 
-    def run(self):
+    def draw(self):
         if self.game_restart:
             self.player.update()
             self.alien_lasers.update()
