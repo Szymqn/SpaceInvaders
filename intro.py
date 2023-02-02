@@ -3,14 +3,12 @@ from leaderboard import Leaderboard
 from settings import Settings
 
 
-class Start:
+class Intro:
     def __init__(self, screen, screen_height, screen_width):
         self.screen = screen
         self.screen_height = screen_height
         self.screen_width = screen_width
         self.font = pygame.font.Font('font/Pixeled.ttf', 20)
-        self.status = True  # start surface status
-        self.quit = False  # quit game
 
         screen_settings = [self.screen, self.screen_height, self.screen_width]
 
@@ -18,15 +16,9 @@ class Start:
         self.settings = Settings(*screen_settings)
 
     def draw(self):
-
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_e]:
-            self.status = False
-        elif keys[pygame.K_q]:
-            self.status = False
-            self.quit = True
-        elif keys[pygame.K_l]:
+        if keys[pygame.K_l]:
             self.leaderboard.status = True
         elif keys[pygame.K_s]:
             self.settings.status = True
