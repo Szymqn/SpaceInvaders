@@ -1,26 +1,22 @@
 import pygame
 import sys
 from game import Game
-from intro import Intro
-from settings import Settings
+from intro import IntroState
 from crt import CRT
 
 
 class GameState:
     def __init__(self):
         self.state = 'intro'
+        self.screen_settings = [screen, screen_height, screen_width]
+        self.state_manager()
 
     def intro(self):
-        intro = Intro(screen, screen.get_height(), screen.get_width())
-        intro.draw()
+        IntroState(*self.screen_settings)
 
     def main_game(self):
-        game = Game(screen, screen.get_height(), screen.get_width())
+        game = Game(*self.screen_settings)
         game.draw()
-
-    def settings(self):
-        settings = Settings(screen, screen.get_height(), screen.get_width())
-        settings.draw()
 
     def state_manager(self):
         match self.state:
@@ -28,8 +24,6 @@ class GameState:
                 self.intro()
             case 'main_game':
                 self.main_game()
-            case 'settings':
-                self.settings()
 
 
 if __name__ == '__main__':
