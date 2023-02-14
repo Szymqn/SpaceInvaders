@@ -22,13 +22,6 @@ class GameState:
         intro = Intro(*self.screen_settings)
         intro.draw()
 
-        keys = pygame.key.get_pressed()
-
-        if keys[pygame.K_l]:
-            self.state = 'leaderboard'
-        elif keys[pygame.K_s]:
-            self.state = 'settings'
-
     def leaderboard(self):
         leaderboard = Leaderboard(*self.screen_settings)
         leaderboard.draw()
@@ -36,6 +29,18 @@ class GameState:
     def settings(self):
         settings = Settings(*self.screen_settings)
         settings.draw()
+
+    def key_interpreter(self):
+        keys = pygame.key.get_pressed()
+
+        if self.state == 'intro':
+            if keys[pygame.K_l]:
+                self.state = 'leaderboard'
+            elif keys[pygame.K_s]:
+                self.state = 'settings'
+        else:
+            if keys[pygame.K_m]:
+                self.state = 'intro'
 
     def state_manager(self):
         match self.state:
@@ -65,6 +70,7 @@ if __name__ == '__main__':
         screen.fill((30, 30, 30))
         crt.draw()
         game_state.state_manager()
+        game_state.key_interpreter()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
