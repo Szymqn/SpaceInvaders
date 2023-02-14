@@ -1,31 +1,12 @@
 import pygame
 
 
-def get_level() -> int:
-    with open('records/level', 'r') as f:
-        temp = f.read().strip().split('\n')
-
-    records = list(map(int, temp))
-    final = records[-1]
-    return final
-
-
-def change_level(level) -> None:
-    with open('records/level', 'a') as f:
-        f.write(str(level)+'\n')
-
-
 class Settings:
     def __init__(self, screen, screen_height, screen_width):
         self.screen = screen
         self.screen_height = screen_height
         self.screen_width = screen_width
-        self.status = False
         self.font = pygame.font.Font('font/Pixeled.ttf', 20)
-        self.current_level = get_level()
-
-    def go_back(self):
-        self.status = False
 
     def draw(self):
         level_surf = self.font.render('SET DIFFICULTY LEVEL', False, 'white')
@@ -47,17 +28,3 @@ class Settings:
         manu_surf = self.font.render('PRESS M TO MENU', False, 'white')
         menu_rect = manu_surf.get_rect(center=(self.screen_width / 2, self.screen_height / 2 + 100))
         self.screen.blit(manu_surf, menu_rect)
-
-        keys = pygame.key.get_pressed()
-
-        # submit
-        if keys[pygame.K_m]:
-            self.go_back()
-
-        # change level
-        elif keys[pygame.K_1]:
-            change_level(1)
-        elif keys[pygame.K_2]:
-            change_level(2)
-        elif keys[pygame.K_3]:
-            change_level(3)
