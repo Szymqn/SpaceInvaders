@@ -1,8 +1,52 @@
 import pygame
 import sys
 from game import Game
-from start import Start
+from intro import Intro
+from leaderboard import Leaderboard
+from settings import Settings
 from crt import CRT
+
+
+class GameState:
+    def __init__(self):
+        self.state = 'intro'
+        self.screen_settings = [screen, screen_height, screen_width]
+
+    def intro(self):
+        self.state = 'intro'
+        intro = Intro(*self.screen_settings)
+        intro.draw()
+
+    def leaderboard(self):
+        leaderboard = Leaderboard(*self.screen_settings)
+        leaderboard.draw()
+
+    def settings(self):
+        settings = Settings(*self.screen_settings)
+        settings.draw()
+
+    def key_interpreter(self):
+        keys = pygame.key.get_pressed()
+
+        if self.state == 'intro':
+            if keys[pygame.K_e]:
+                self.state = 'main_game'
+            elif keys[pygame.K_s]:
+                self.state = 'settings'
+            elif keys[pygame.K_l]:
+                self.state = 'leaderboard'
+        else:
+            if keys[pygame.K_m]:
+                self.state = 'intro'
+
+    def state_manager(self):
+        match self.state:
+            case 'intro':
+                self.intro()
+            case 'leaderboard':
+                self.leaderboard()
+            case 'settings':
+                self.settings()
 
 
 if __name__ == '__main__':
@@ -11,45 +55,28 @@ if __name__ == '__main__':
     screen_height = 600
     screen = pygame.display.set_mode((screen_width, screen_height))
     clock = pygame.time.Clock()
-    screen_setting = [screen, screen_height, screen_height]
-    start = Start(*screen_setting)
-    game = Game(*screen_setting)
-    crt = CRT(*screen_setting)
+    crt = CRT(screen, screen.get_height(), screen.get_width())
+    game = Game(screen, screen.get_height(), screen.get_width())
 
     ALIENLASER = pygame.USEREVENT + 1
     pygame.time.set_timer(ALIENLASER, 800)
-
-    def to_menu():
-        start.status = True
-        game.status = True
-        game.game_restart = True
-        game.restart()
-
-    def quit_game():
-        pygame.quit()
-        sys.exit()
+    game_state = GameState()
 
     while True:
         screen.fill((30, 30, 30))
         crt.draw()
+        game_state.state_manager()
+        game_state.key_interpreter()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                quit_game()
-            if event.type == ALIENLASER and start.status is False:
+                pygame.quit()
+                sys.exit()
+            if event.type == ALIENLASER and game_state.state == "main_game":
                 game.alien_shoot()
 
-        if game.quit:
-            quit_game()
+        if game_state.state == "main_game":
+            game.draw()
 
-        if start.status:  # active start surface
-            start.draw()
-            if start.quit:
-                quit_game()
-        elif not game.status:  # deactivate game surface
-            to_menu()
-        else:  # active game surface
-            game.run()
-
-        pygame.display.flip()
         clock.tick(60)
+        pygame.display.flip()
