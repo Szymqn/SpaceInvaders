@@ -1,5 +1,4 @@
 import unittest
-import settings
 
 
 class MyTestCase(unittest.TestCase):
