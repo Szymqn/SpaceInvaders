@@ -11,11 +11,6 @@ class GameState:
     def __init__(self):
         self.state = 'intro'
         self.screen_settings = [screen, screen_height, screen_width]
-        self.state_manager()
-
-    def main_game(self):
-        game = Game(*self.screen_settings)
-        game.draw()
 
     def intro(self):
         self.state = 'intro'
@@ -34,10 +29,12 @@ class GameState:
         keys = pygame.key.get_pressed()
 
         if self.state == 'intro':
-            if keys[pygame.K_l]:
-                self.state = 'leaderboard'
+            if keys[pygame.K_e]:
+                self.state = 'main_game'
             elif keys[pygame.K_s]:
                 self.state = 'settings'
+            elif keys[pygame.K_l]:
+                self.state = 'leaderboard'
         else:
             if keys[pygame.K_m]:
                 self.state = 'intro'
@@ -46,8 +43,6 @@ class GameState:
         match self.state:
             case 'intro':
                 self.intro()
-            case 'main_game':
-                self.main_game()
             case 'leaderboard':
                 self.leaderboard()
             case 'settings':
@@ -61,6 +56,7 @@ if __name__ == '__main__':
     screen = pygame.display.set_mode((screen_width, screen_height))
     clock = pygame.time.Clock()
     crt = CRT(screen, screen.get_height(), screen.get_width())
+    game = Game(screen, screen.get_height(), screen.get_width())
 
     ALIENLASER = pygame.USEREVENT + 1
     pygame.time.set_timer(ALIENLASER, 800)
@@ -76,6 +72,11 @@ if __name__ == '__main__':
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == ALIENLASER and game_state.state == "main_game":
+                game.alien_shoot()
+
+        if game_state.state == "main_game":
+            game.draw()
 
         clock.tick(60)
         pygame.display.flip()
