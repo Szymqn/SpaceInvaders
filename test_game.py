@@ -1,8 +1,12 @@
 import unittest
+import settings
 
 
 class MyTestCase(unittest.TestCase):
-    pass
+    def test_get_level(self):
+        self.level = settings.get_level()
+
+        self.assertEqual(settings.get_level(), 1)
 
 
 if __name__ == '__main__':
