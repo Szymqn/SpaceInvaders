@@ -1,3 +1,4 @@
+import sys
 import pygame
 import obstacle
 from random import choice, randint
@@ -14,8 +15,6 @@ class Game:
 
         self.game_restart = True
         self.victory_status = True
-        self.status = True
-        self.quit = False
         self.score_record = True
         self.level = 1
 
@@ -215,15 +214,12 @@ class Game:
         self.screen.blit(quit_surf, quit_rect)
 
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_r]:
+        if keys[pygame.K_r] or keys[pygame.K_m]:
             self.game_restart = True
             self.restart()
-        elif keys[pygame.K_m]:
-            self.game_restart = True
-            self.restart()
-            self.status = False
         elif keys[pygame.K_q]:
-            self.quit = True
+            pygame.quit()
+            sys.exit()
 
     def score_message(self):
         self.leaderboard()
