@@ -53,7 +53,7 @@ class Game:
         music = pygame.mixer.Sound('audio/music.wav')
         music.set_volume(0.04)
         # infinity loop
-        # music.play(loops=-1)
+        music.play(loops=-1)
         self.laser_sound = pygame.mixer.Sound('audio/laser.wav')
         self.laser_sound.set_volume(0.06)
         self.explosion_sound = pygame.mixer.Sound('audio/explosion.wav')
