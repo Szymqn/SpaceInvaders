@@ -1,5 +1,7 @@
 import sys
 import pygame
+
+import alien
 import obstacle
 from random import choice, randint
 from alien import Alien, Extra
@@ -78,6 +80,9 @@ class Game:
 
     def change_level(self, new_level):
         Game.level = new_level
+        self.aliens_destroy()
+        self.game_restart = True
+        self.alien_setup(self.rows, self.cols)
 
     def alien_setup(self, rows, cols, x_distance=60, y_distance=48, x_offset=70, y_offset=100):
         global alien_sprite
