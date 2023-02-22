@@ -1,8 +1,7 @@
 import sys
 import pygame
-
-import alien
 import obstacle
+
 from random import choice, randint
 from alien import Alien, Extra
 from laser import Laser
