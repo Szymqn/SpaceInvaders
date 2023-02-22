@@ -8,7 +8,7 @@ from player import Player
 
 
 class Game:
-    level = 3
+    level = 2
 
     def __init__(self, screen, screen_height, screen_width):
         self.screen = screen
