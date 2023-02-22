@@ -8,6 +8,8 @@ from player import Player
 
 
 class Game:
+    level = 1
+
     def __init__(self, screen, screen_height, screen_width):
         self.screen = screen
         self.screen_height = screen_height
@@ -16,7 +18,6 @@ class Game:
         self.game_restart = True
         self.victory_status = True
         self.score_record = True
-        self.level = 1
 
         # Player setup
         player_sprite = Player((self.screen_width / 2, self.screen_height), self.screen_width, speed=5)
@@ -75,6 +76,9 @@ class Game:
     def obstacles_destroy(self):
         self.blocks.empty()
 
+    def change_level(self, new_level):
+        Game.level = new_level
+
     def alien_setup(self, rows, cols, x_distance=60, y_distance=48, x_offset=70, y_offset=100):
         global alien_sprite
         for row_index, row in enumerate(range(rows)):
@@ -84,9 +88,9 @@ class Game:
 
                 if row_index == 0:
                     alien_sprite = Alien('yellow', x, y)
-                if 1 <= row_index <= 2 and self.level > 1:
+                if 1 <= row_index <= 2 and Game.level > 1:
                     alien_sprite = Alien('green', x, y)
-                if row_index >= 3 and self.level > 2:
+                if row_index >= 3 and Game.level > 2:
                     alien_sprite = Alien('red', x, y)
 
                 self.aliens.add(alien_sprite)
