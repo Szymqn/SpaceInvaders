@@ -18,6 +18,12 @@ class GameState:
         intro = Intro(*self.screen_settings)
         intro.draw()
 
+        keys = pygame.key.get_pressed()
+
+        if keys[pygame.K_q]:
+            pygame.quit()
+            sys.exit()
+
     def leaderboard(self):
         leaderboard = Leaderboard(*self.screen_settings)
         leaderboard.draw()
