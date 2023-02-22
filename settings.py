@@ -1,7 +1,7 @@
 import pygame
 
 
-def set_level():
+def set_level(default):
     keys = pygame.key.get_pressed()
 
     if keys[pygame.K_1]:
@@ -11,7 +11,7 @@ def set_level():
     elif keys[pygame.K_3]:
         return 3
 
-    return 1
+    return default
 
 
 class Settings:
