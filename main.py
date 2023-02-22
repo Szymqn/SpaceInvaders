@@ -3,7 +3,7 @@ import sys
 from game import Game
 from intro import Intro
 from leaderboard import Leaderboard
-from settings import Settings
+from settings import Settings, set_level
 from crt import CRT
 
 
@@ -11,6 +11,7 @@ class GameState:
     def __init__(self):
         self.state = 'intro'
         self.screen_settings = [screen, screen_height, screen_width]
+        self.level = 1
 
     def intro(self):
         self.state = 'intro'
@@ -24,6 +25,9 @@ class GameState:
     def settings(self):
         settings = Settings(*self.screen_settings)
         settings.draw()
+
+        self.level = set_level(self.level)
+        game.change_level(self.level)
 
     def key_interpreter(self):
         keys = pygame.key.get_pressed()

@@ -1,6 +1,19 @@
 import pygame
 
 
+def set_level(default):
+    keys = pygame.key.get_pressed()
+
+    if keys[pygame.K_1]:
+        return 1
+    elif keys[pygame.K_2]:
+        return 2
+    elif keys[pygame.K_3]:
+        return 3
+
+    return default
+
+
 class Settings:
     def __init__(self, screen, screen_height, screen_width):
         self.screen = screen
