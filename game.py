@@ -94,8 +94,12 @@ class Game:
                     alien_sprite = Alien('yellow', x, y)
                 if 1 <= row_index <= 2 and Game.level > 1:
                     alien_sprite = Alien('green', x, y)
-                if row_index >= 3 and Game.level > 2:
+                if 2 <= row_index <= 3 and Game.level > 2:
                     alien_sprite = Alien('red', x, y)
+                if 4 <= row_index <= 5 and Game.level > 3:
+                    alien_sprite = Alien('blue', x, y)
+                if row_index >= 6 and Game.level > 4:
+                    alien_sprite = Alien('purple', x, y)
 
                 self.aliens.add(alien_sprite)
 

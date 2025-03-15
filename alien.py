@@ -1,10 +1,13 @@
 import pygame
+import os
 
 
 class Alien(pygame.sprite.Sprite):
     def __init__(self, color, x, y):
         super().__init__()
-        file_path = 'graphics/' + color + '.png'
+        file_path = os.path.join('graphics', f'{color}.png')
+        if not os.path.exists(file_path):
+            raise FileNotFoundError(f"Image file not found: {file_path}")
         self.image = pygame.image.load(file_path).convert_alpha()
         self.rect = self.image.get_rect(center=(x, y))
 
@@ -15,6 +18,10 @@ class Alien(pygame.sprite.Sprite):
                 self.value = 200
             case 'yellow':
                 self.value = 300
+            case 'blue':
+                self.value = 400
+            case 'purple':
+                self.value = 500
 
     def update(self, direction):
         self.rect.x += direction
