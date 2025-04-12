@@ -19,9 +19,15 @@ class Leaderboard:
         with open(leaderboard_path, 'r') as f:
             temp = f.read().strip().split('\n')
 
-        records = list(map(int, temp))
-        records.sort(reverse=True)
+        records = []
+        for line in temp:
+            try:
+                name, score = line.split(': ')
+                records.append((name, int(score)))
+            except ValueError:
+                continue
 
+        records.sort(key=lambda x: x[1], reverse=True)
         return records
 
     def draw(self):
@@ -37,12 +43,12 @@ class Leaderboard:
 
         for i in range(10):
             try:
-                value = records[i]
+                name, score = records[i]
             except IndexError:
-                records.append(None)
-                value = None
+                name, score = None, None
 
-            score_surf = self.font.render(f'{pos}: {value}', False, gold_color)
+            score_text = f'{pos}: {name} - {score}' if name and score else f'{pos}: ---'
+            score_surf = self.font.render(score_text, False, gold_color)
 
             score_rect = score_surf.get_rect(center=(self.screen_width / 2, ((self.screen_height / 2) - 220) + offset))
             offset += 40

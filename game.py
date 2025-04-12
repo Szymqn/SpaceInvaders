@@ -12,11 +12,12 @@ from player import Player
 class Game:
     level = 2
 
-    def __init__(self, screen, screen_height, screen_width):
+    def __init__(self, screen, screen_height, screen_width, player_name):
         base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
         self.screen = screen
         self.screen_height = screen_height
         self.screen_width = screen_width
+        self.player_name = player_name
 
         self.game_restart = True
         self.victory_status = True
@@ -264,23 +265,39 @@ class Game:
         if self.score_record:
             leaderboard_path = os.path.join(self.get_base_path(), 'records', 'leaderboard')
             with open(leaderboard_path, 'a') as f:
-                f.write(str(self.score)+'\n')
+                f.write(f'{self.player_name}: {self.score}\n')
 
             self.score_record = False
 
     def high_score(self):
-        high_score_path = os.path.join(self.get_base_path(), 'records', 'high_score')
-        with open(high_score_path, 'r') as f:
+        base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+        leaderboard_path = os.path.join(base_path, 'records', 'leaderboard')
+        high_score_path = os.path.join(base_path, 'records', 'high_score')
+
+        if not os.path.exists(leaderboard_path):
+            with open(leaderboard_path, 'w') as f:
+                f.write(f'{self.player_name}: {self.score}\n')
+
+        with open(leaderboard_path, 'r') as f:
             lines = f.readlines()
 
-        high_score = lines[0]
+        scores = {}
+        for line in lines:
+            try:
+                name, score = line.split(': ')
+                score = int(score)
+                if name in scores:
+                    scores[name] = max(scores[name], score)
+                else:
+                    scores[name] = score
+            except ValueError:
+                continue
 
-        if self.score > int(high_score):
-            with open(high_score_path, 'w') as f:
-                f.write(str(self.score))
-                f.close()
+        with open(high_score_path, 'w') as f:
+            for name, score in scores.items():
+                f.write(f'{name}: {score}\n')
 
-        return high_score
+        return scores.get(self.player_name, 0)
 
     def restart(self):
         self.alien_setup(self.rows, self.cols)

@@ -8,3 +8,5 @@ docutils~=0.21.2
 filelock~=3.17.0
 numpy~=2.2.1
 pyinstaller~=6.12.0
+
+# (env) PS C:\Users\koodz\PycharmProjects\SpaceInvaders> pyinstaller --onefile -w --add-data="graphics/*;graphics" --add-data="audio/*;audio" --add-data="font/*;font" --add-data="records/*;records" .\main.py
