@@ -264,8 +264,23 @@ class Game:
     def leaderboard(self):
         if self.score_record:
             leaderboard_path = os.path.join(self.get_base_path(), 'records', 'leaderboard')
-            with open(leaderboard_path, 'a') as f:
-                f.write(f'{self.player_name}: {self.score}\n')
+            scores = {}
+
+            if os.path.exists(leaderboard_path):
+                with open(leaderboard_path, 'r') as f:
+                    for line in f:
+                        try:
+                            name, score = line.strip().split(': ')
+                            score = int(score)
+                            scores[name] = max(scores.get(name, 0), score)
+                        except ValueError:
+                            continue
+
+            scores[self.player_name] = max(scores.get(self.player_name, 0), self.score)
+
+            with open(leaderboard_path, 'w') as f:
+                for name, score in scores.items():
+                    f.write(f'{name}: {score}\n')
 
             self.score_record = False
 
