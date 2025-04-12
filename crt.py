@@ -1,13 +1,17 @@
 import pygame
+import os
+import sys
 from random import randint
 
 
 class CRT:
     def __init__(self, screen, screen_height, screen_width):
+        base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
         self.screen = screen
         self.screen_height = screen_height
         self.screen_width = screen_width
-        self.tv = pygame.image.load('graphics/tv.png').convert_alpha()
+        tv_image_path = os.path.join(base_path, 'graphics', 'tv.png')
+        self.tv = pygame.image.load(tv_image_path).convert_alpha()
         self.tv = pygame.transform.scale(self.tv, (self.screen_width, self.screen_height))
 
     def create_crt_lines(self):

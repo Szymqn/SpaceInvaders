@@ -1,4 +1,5 @@
 import sys
+import os
 import pygame
 import obstacle
 
@@ -12,6 +13,7 @@ class Game:
     level = 2
 
     def __init__(self, screen, screen_height, screen_width):
+        base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
         self.screen = screen
         self.screen_height = screen_height
         self.screen_width = screen_width
@@ -26,10 +28,14 @@ class Game:
 
         # health and score setup
         self.lives = 3
-        self.live_surf = pygame.image.load('graphics/player.png').convert_alpha()
+        # self.live_surf = pygame.image.load('graphics/player.png').convert_alpha()
+        player_path = os.path.join(base_path, 'graphics', 'player.png')
+        self.live_surf = pygame.image.load(player_path).convert_alpha()
         self.live_x_start_pos = screen_width - (self.live_surf.get_size()[0] * 2 + 20)
         self.score = 0
-        self.font = pygame.font.Font('font/Pixeled.ttf', 20)
+        # self.font = pygame.font.Font('font/Pixeled.ttf', 20)
+        font_path = os.path.join(base_path, 'font', 'Pixeled.ttf')
+        self.font = pygame.font.Font(font_path, 20)
 
         # Obstacle setup
         self.shape = obstacle.shape
@@ -52,14 +58,23 @@ class Game:
         self.extra_spawn_time = randint(40, 80)
 
         # Audio
-        music = pygame.mixer.Sound('audio/music.wav')
+        # music = pygame.mixer.Sound('audio/music.wav')
+        music_path = os.path.join(base_path, 'audio', 'music.wav')
+        music = pygame.mixer.Sound(music_path)
         music.set_volume(0.04)
         # infinity loop
         music.play(loops=-1)
-        self.laser_sound = pygame.mixer.Sound('audio/laser.wav')
+        # self.laser_sound = pygame.mixer.Sound('audio/laser.wav')
+        laser_sound_path = os.path.join(base_path, 'audio', 'laser.wav')
+        self.laser_sound = pygame.mixer.Sound(laser_sound_path)
         self.laser_sound.set_volume(0.06)
-        self.explosion_sound = pygame.mixer.Sound('audio/explosion.wav')
+        # self.explosion_sound = pygame.mixer.Sound('audio/explosion.wav')
+        explosion_sound_path = os.path.join(base_path, 'audio', 'explosion.wav')
+        self.explosion_sound = pygame.mixer.Sound(explosion_sound_path)
         self.explosion_sound.set_volume(0.06)
+
+    def get_base_path(self):
+        return getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
 
     def create_obstacle(self, x_start, y_start, offset_x):
         for row_index, row in enumerate(self.shape):
@@ -247,19 +262,21 @@ class Game:
 
     def leaderboard(self):
         if self.score_record:
-            with open('records/leaderboard', 'a') as f:
+            leaderboard_path = os.path.join(self.get_base_path(), 'records', 'leaderboard')
+            with open(leaderboard_path, 'a') as f:
                 f.write(str(self.score)+'\n')
 
             self.score_record = False
 
     def high_score(self):
-        with open('records/high_score', 'r') as f:
+        high_score_path = os.path.join(self.get_base_path(), 'records', 'high_score')
+        with open(high_score_path, 'r') as f:
             lines = f.readlines()
 
         high_score = lines[0]
 
         if self.score > int(high_score):
-            with open('records/high_score', 'w') as f:
+            with open(high_score_path, 'w') as f:
                 f.write(str(self.score))
                 f.close()
 

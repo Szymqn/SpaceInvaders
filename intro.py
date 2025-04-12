@@ -1,4 +1,6 @@
 import pygame
+import sys
+import os
 
 
 class Intro:
@@ -6,7 +8,9 @@ class Intro:
         self.screen = screen
         self.screen_height = screen_height
         self.screen_width = screen_width
-        self.font = pygame.font.Font('font/Pixeled.ttf', 20)
+        base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+        font_path = os.path.join(base_path, 'font', 'Pixeled.ttf')
+        self.font = pygame.font.Font(font_path, 20)
 
     def draw(self):
         menu_surf = self.font.render('WELCOME TO SPACE INVADERS', False, 'white')

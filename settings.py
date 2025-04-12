@@ -1,5 +1,6 @@
 import pygame
-
+import os
+import sys
 
 def set_level(default):
     keys = pygame.key.get_pressed()
@@ -23,7 +24,10 @@ class Settings:
         self.screen = screen
         self.screen_height = screen_height
         self.screen_width = screen_width
-        self.font = pygame.font.Font('font/Pixeled.ttf', 20)
+        # self.font = pygame.font.Font('font/Pixeled.ttf', 20)
+        base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+        font_path = os.path.join(base_path, 'font', 'Pixeled.ttf')
+        self.font = pygame.font.Font(font_path, 20)
 
     def draw(self):
         center_x = self.screen_width / 2
@@ -49,7 +53,7 @@ class Settings:
         self.screen.blit(hard_surf, hard_rect)
 
         v_hard_surf = self.font.render('VERY HARD - 5', False, 'white')
-        v_hard_rect = hard_surf.get_rect(center=(center_x, self.screen_height / 2 + 40))
+        v_hard_rect = hard_surf.get_rect(center=(center_x - 45, self.screen_height / 2 + 40))
         self.screen.blit(v_hard_surf, v_hard_rect)
 
         manu_surf = self.font.render('PRESS M TO MENU', False, 'white')

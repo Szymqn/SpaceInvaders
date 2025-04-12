@@ -1,4 +1,6 @@
 import pygame
+import os
+import sys
 
 
 class Leaderboard:
@@ -6,11 +8,15 @@ class Leaderboard:
         self.screen = screen
         self.screen_height = screen_height
         self.screen_width = screen_width
-        self.font = pygame.font.Font('font/Pixeled.ttf', 20)
+        base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+        font_path = os.path.join(base_path, 'font', 'Pixeled.ttf')
+        self.font = pygame.font.Font(font_path, 20)
 
     @staticmethod
     def get_records():
-        with open('records/leaderboard', 'r') as f:
+        base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+        leaderboard_path = os.path.join(base_path, 'records', 'leaderboard')
+        with open(leaderboard_path, 'r') as f:
             temp = f.read().strip().split('\n')
 
         records = list(map(int, temp))
