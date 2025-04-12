@@ -9,10 +9,10 @@ from settings import Settings, set_level
 from crt import CRT
 
 
-def get_player_name(screen, font):
+def get_player_name(screen, font, crt):
     input_box = pygame.Rect(100, 300, 400, 50)
-    color_inactive = pygame.Color('lightskyblue3')
-    color_active = pygame.Color('dodgerblue2')
+    color_inactive = '#AA6C39'
+    color_active = '#AA7F39'
     color = color_inactive
     active = False
     text = ''
@@ -32,19 +32,26 @@ def get_player_name(screen, font):
                 if active:
                     if event.key == pygame.K_RETURN:
                         done = True
+                    elif event.key == pygame.K_BACKSPACE:
+                        text = text[:-1]
                     else:
                         text += event.unicode
 
         screen.fill((30, 30, 30))
 
+        crt.draw()
         name_surf = font.render('Enter your name:', False, color_inactive)
-        name_rect = name_surf.get_rect(center=(screen.get_width() / 2, (screen.get_height() / 2) - 240))
+        name_rect = name_surf.get_rect(center=(screen.get_width() / 2, (screen.get_height() / 2) - 75))
         screen.blit(name_surf, name_rect)
 
+        confirm_surf = font.render('To confirm press ENTER', False, color_inactive)
+        confirm_rect = name_surf.get_rect(center=(screen.get_width() / 2 - 50, (screen.get_height() / 2) + 100))
+        screen.blit(confirm_surf, confirm_rect)
+
         txt_surface = font.render(text, True, color)
-        width = max(400, txt_surface.get_width() + 10)
-        input_box.w = width
-        screen.blit(txt_surface, (input_box.x + 5, input_box.y + 5))
+        text_rect = txt_surface.get_rect(center=(input_box.centerx, input_box.centery))
+        screen.blit(txt_surface, text_rect)
+
         pygame.draw.rect(screen, color, input_box, 2)
         pygame.display.flip()
 
@@ -114,8 +121,7 @@ if __name__ == '__main__':
     base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
     font_path = os.path.join(base_path, 'font', 'Pixeled.ttf')
     font = pygame.font.Font(font_path, 20)
-    player_name = get_player_name(screen, font)
-    print(f"Player name: {player_name}")
+    player_name = get_player_name(screen, font, crt)
 
     game = Game(screen, screen.get_height(), screen.get_width(), player_name)
 
